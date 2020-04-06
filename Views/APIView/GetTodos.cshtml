@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/script/Notifications.js"></script>
+    <link rel="stylesheet" href="~/css/Todos.css">
+
+    <title>Todo List</title>
+</head>
+<body>
+    <button class="btn btn-primary btn-lg"> <a style="color: wheat;" href="/swagger/index.html" target="_blank">Swagger</a></button>
+    <div class="todo-list">
+        <h1>Todo List</h1>
+        <p class="date"></p>
+        <button class="new">+</button>
+        <ul></ul>
+        <div class="input hide">
+            <input type="number" id="hiddenid" hidden />
+            <textarea class="todo-input" placeholder="What are we planning?"></textarea>
+            <button class="cancel">✘</button>
+            <button class="ok">✔</button>
+        </div>
+    </div>
+    <div class="page-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+</body>
+
+</html>
+
+<script src="~/script/Todos.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        GetTodosList();
+    });
+
+    function GetTodosList() {
+
+        $.ajax({
+            url: "/GetTodos",
+            type: "Get",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (msg) {
+                debugger;
+                var data = msg.todos;
+                if (msg.isSuccess == true) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        var Id = data[i].id;
+                        var todoInput = data[i].name;
+                        var isDone = data[i].isDone;
+
+                        if (todoInput != "") {
+
+                            const li = document.createElement("li");
+
+                            const doneBtn = document.createElement("input");
+                            doneBtn.type = "checkbox";
+                            doneBtn.id = Id;
+                            doneBtn.checked = isDone;
+                            doneBtn.classList.add("done");
+
+                            const text = document.createElement("p");
+                            text.classList.add("text");
+                            text.textContent = todoInput;
+
+
+                            const buttonsDiv = document.createElement("div");
+                            const editBtn = buttonsDiv.appendChild(document.createElement("span"));
+                            editBtn.classList.add("edit");
+
+                            const delBtn = buttonsDiv.appendChild(document.createElement("span"));
+                            delBtn.classList.add("del");
+
+                            ul.appendChild(li).append(doneBtn, text, buttonsDiv);
+                            letsDone(doneBtn);
+                            listenDeleteTodo(delBtn);
+                            listenEditTodo(editBtn);
+                            if (isDone) doneBtn.parentElement.children[1].style.textDecoration = "line-through";
+
+
+                        }
+                    }
+                }
+                else
+                    errorAlert(msg.responseMessage);
+
+            },
+            error: function () {
+                errorAlert("Error Occured while Getting Todos");
+            }
+        });
+    };
+
+    function saveTodoList(name, Isdone) {
+        var request = { Name: name, IsDone: Isdone };
+        $.ajax({
+            url: "/CreateTodos",
+            type: "Post",
+            data: JSON.stringify(request),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                const li = document.createElement("li");
+
+                const doneBtn = document.createElement("input");
+                doneBtn.type = "checkbox";
+                doneBtn.id = data.id;
+                doneBtn.classList.add("done");
+
+                const text = document.createElement("p");
+                text.classList.add("text");
+                text.textContent = todoInput.value;
+
+                const buttonsDiv = document.createElement("div");
+                const editBtn = buttonsDiv.appendChild(document.createElement("span"));
+                editBtn.classList.add("edit");
+
+                const delBtn = buttonsDiv.appendChild(document.createElement("span"));
+                delBtn.classList.add("del");
+
+                ul.appendChild(li).append(doneBtn, text, buttonsDiv);
+                letsDone(doneBtn);
+                listenDeleteTodo(delBtn);
+                listenEditTodo(editBtn);
+                todoInput.value = "";
+                successAlert(data.responseMessage);
+            },
+            error: function () {
+                errorAlert("Error Occured while Saving");
+            }
+        });
+    }
+
+    function saveletsDone(id, name, Isdone) {
+        var request = { ID: parseInt(id), Name: name, IsDone: Isdone };
+        $.ajax({
+            url: "/EditTodos",
+            type: "Post",
+            data: JSON.stringify(request),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                todoInput.value = "";
+                successAlert(data.responseMessage);
+            },
+            error: function () {
+                errorAlert("Error Occured while Updating");
+            }
+        });
+    }
+
+    function DeleteTodo(id) {
+        $.ajax({
+            url: "/DeleteTodos?id=" + id,
+            type: "Post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                successAlert(data.responseMessage);
+            },
+            error: function () {
+                errorAlert("Error Occured while Deleting");
+            }
+        });
+    }
+
+</script>

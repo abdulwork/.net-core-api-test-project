@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestProject</name>
+    </assembly>
+    <members>
+        <member name="M:TestProject.Controllers.TodosController.LogIn(TestProject.Models.LoginModel)">
+            <summary>
+            LogIn Method is use for Authenticating User
+            </summary>
+            <param name="User NameName"></param>
+            <param name="Password"></param>
+            <returns>Success Message User Logined Successfully or not</returns>
+        </member>
+        <member name="M:TestProject.Controllers.TodosController.GetTodos">
+            <summary>
+            GetTodos is Get Method it will return all Todos List
+            </summary>
+            <returns>List of All Todos</returns>
+        </member>
+        <member name="M:TestProject.Controllers.TodosController.ToDosDetails(System.Nullable{System.Int32})">
+            <summary>
+            ToDosDetails is a Post Method To get Todo against specific ID
+            </summary>
+            <param name="id"></param>
+            <returns> Rreturn Todos against provided ID if no record found empty Todos</returns>
+        </member>
+        <member name="M:TestProject.Controllers.TodosController.CreateTodos(TestProject.Models.Todos)">
+            <summary>
+            CreateTodos is a post method for creation of new Todos
+            </summary>
+            <param name="todos"></param>
+            <returns>Return Success message on successful creation otherwise return Fails message </returns>
+        </member>
+        <member name="M:TestProject.Controllers.TodosController.EditTodos(TestProject.Models.Todos)">
+            <summary>
+            EditTodos is a post method for Updating of a Todos record
+            </summary>
+            <param name="todos"></param>
+            <returns> Return success message on updating record otherwise fail message</returns>
+        </member>
+        <member name="M:TestProject.Controllers.TodosController.DeleteTodos(System.Int32)">
+            <summary>
+            DeleteTodos is a post method for Deleting a Todo
+            </summary>
+            <param name="id"></param>
+            <returns>Return success message on Deleting record otherwise fail message</returns>
+        </member>
+        <member name="T:TestProject.Models.LoginModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:TestProject.Models.LoginModel.UserName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:TestProject.Models.LoginModel.UserPassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:TestProject.Models.LoginModel.Userloginvalues">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
